@@ -1,4 +1,5 @@
 {
+  "homepage": "https://dangnv99.github.io/dev-manager-desktop",
   "name": "vite-react-typescript-starter",
   "private": true,
   "version": "0.0.0",
@@ -8,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
+   "predeploy": "yarn build",
+"deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
