@@ -16,14 +16,12 @@ import {
 
 // List câu hỏi để random mỗi lần gọi API
 const questions = [
-  "Can thiet ke dark",
-  "Optimize dashboard UI",
-  "Improve authentication security",
-  "How to use Redux middleware",
-  "Refactor product detail screen",
-  "Testing strategy for React project",
-  "How to export PDF in frontend",
-  "Best practice for code review",
+  "Thiết lập xác thực dựa trên JWT với refresh token",
+  "Menu trên mobile không đóng khi click bên ngoài",
+  "Refactor các query và thêm index để cải thiện tốc độ",
+  "Tìm hiểu và đánh giá khả năng áp dụng GraphQL",
+  "Cách xuất file PDF ở phía frontend",
+  "Thực tiễn tốt nhất khi review code",
 ];
 
 function getRandomQuestion() {
