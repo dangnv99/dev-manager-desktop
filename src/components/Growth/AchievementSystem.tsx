@@ -231,7 +231,7 @@ const AchievementSystem: React.FC = () => {
             
             return (
               <button
-                key={category.id}
+                key={category?.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
                   isActive
@@ -256,7 +256,7 @@ const AchievementSystem: React.FC = () => {
             
             return (
               <div
-                key={achievement.id}
+                key={achievement?.id}
                 className={`p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md ${
                   isUnlocked 
                     ? getRarityColor(achievement.rarity || 'common')

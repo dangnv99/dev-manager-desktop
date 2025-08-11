@@ -22,6 +22,22 @@ const questions = [
   "Tìm hiểu và đánh giá khả năng áp dụng GraphQL",
   "Cách xuất file PDF ở phía frontend",
   "Thực tiễn tốt nhất khi review code",
+  "Cách tối ưu hóa hiệu suất ứng dụng React",
+  "Cách sử dụng WebSockets trong ứng dụng real-time",
+  "Cách triển khai CI/CD với GitHub Actions",
+  "Tối ưu hóa SEO cho ứng dụng React",
+  "Cách sử dụng Context API trong React",
+  "Các phương pháp bảo mật API RESTful",
+  "Cách sử dụng TypeScript với React",
+  "Tối ưu hóa trải nghiệm người dùng trên mobile",
+  "Cách quản lý trạng thái toàn cục với Redux Toolkit",
+  "Các kỹ thuật tối ưu hóa hình ảnh trên web",
+  "Cách sử dụng Tailwind CSS trong dự án React", 
+  "Cách triển khai Progressive Web App (PWA)",
+  "Các phương pháp kiểm thử tự động trong React",
+  "Cách sử dụng React Router để quản lý điều hướng",
+  "Tối ưu hóa hiệu suất ứng dụng Node.js",
+  "Cách sử dụng GraphQL với Apollo Client",
 ];
 
 function getRandomQuestion() {
@@ -42,7 +58,7 @@ const AILearningRecommendations: React.FC = () => {
     try {
       const question = getRandomQuestion();
       setCurrentQuestion(question);
-      const url = `https://de666aa7b3e5.ngrok-free.app/api/chat/v3?question=${encodeURIComponent(
+      const url = `https://khanhnqheroku-a87ce8658e9d.herokuapp.com/api/chat/v3?question=${encodeURIComponent(
         question
       )}`;
       const res = await axios.get(url, {

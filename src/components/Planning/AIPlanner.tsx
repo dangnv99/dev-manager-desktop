@@ -1,3 +1,4 @@
+// AIPlanner.jsx
 import React, { useState } from "react";
 import { useTaskManager } from "../../contexts/TaskManagerContext";
 import {
@@ -16,7 +17,7 @@ import {
 // Gọi API thật lấy suggestion AI
 const fetchAiSuggestions = async (tasks) => {
   const response = await fetch(
-    "https://de666aa7b3e5.ngrok-free.app/api/chat/v4",
+    "https://khanhnqheroku-a87ce8658e9d.herokuapp.com/api/chat/v4",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,7 +25,23 @@ const fetchAiSuggestions = async (tasks) => {
     }
   );
   if (!response.ok) throw new Error("API request failed");
-  return await response.json();
+  const data = await response.json();
+  return Array.isArray(data) ? data : data?.suggestions ?? data?.data ?? [];
+};
+
+// Chuẩn hoá & tạo khoá duy nhất/stable cho mỗi suggestion
+const normalizeSuggestions = (list = []) => {
+  const counts = new Map();
+  return list.map((s, idx) => {
+    const base =
+      s?.id != null && s?.id !== ""
+        ? String(s.id)
+        : `${s?.type ?? "item"}-${s?.title ?? ""}`.trim() || `item-${idx}`;
+    const seen = counts.get(base) || 0;
+    counts.set(base, seen + 1);
+    const key = seen === 0 ? base : `${base}-${seen}`;
+    return { ...s, _key: key };
+  });
 };
 
 const AIPlanner = () => {
@@ -35,9 +52,11 @@ const AIPlanner = () => {
   const generateAIplan = async () => {
     setIsGenerating(true);
     try {
-      const suggestions = await fetchAiSuggestions(state.tasks);
-      setAiSuggestions(suggestions);
+      const raw = await fetchAiSuggestions(state?.tasks ?? []);
+      const normalized = normalizeSuggestions(raw);
+      setAiSuggestions(normalized);
     } catch (err) {
+      console.warn("AI suggestions error:", err);
       setAiSuggestions([]);
       alert("Có lỗi khi lấy đề xuất AI. Vui lòng thử lại!");
     } finally {
@@ -46,7 +65,7 @@ const AIPlanner = () => {
   };
 
   const getImpactColor = (impact) => {
-    switch (impact) {
+    switch ((impact || "").toLowerCase()) {
       case "high":
         return "text-red-600 bg-red-100 dark:bg-red-900/20";
       case "medium":
@@ -59,7 +78,7 @@ const AIPlanner = () => {
   };
 
   const getSuggestionIcon = (type) => {
-    switch (type) {
+    switch ((type || "").toLowerCase()) {
       case "ui":
         return <LayoutDashboard className="w-5 h-5" />;
       case "feature":
@@ -78,7 +97,7 @@ const AIPlanner = () => {
   return (
     <div
       className={`rounded-xl transition-colors duration-300 ${
-        state.theme === "dark"
+        state?.theme === "dark"
           ? "bg-gray-800 border border-gray-700"
           : "bg-white border border-gray-100 shadow-sm"
       }`}
@@ -131,8 +150,8 @@ const AIPlanner = () => {
               Sẵn sàng tối ưu hóa kế hoạch dev
             </h4>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              AI sẽ phân tích {state.tasks.length} task của bạn và đưa ra các đề
-              xuất thông minh sát thực tế phát triển phần mềm.
+              AI sẽ phân tích {state?.tasks?.length ?? 0} task của bạn và đưa ra
+              các đề xuất thông minh sát thực tế phát triển phần mềm.
             </p>
             <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
               <div className="flex items-center space-x-2">
@@ -153,9 +172,9 @@ const AIPlanner = () => {
           <div className="space-y-4">
             {aiSuggestions.map((suggestion) => (
               <div
-                key={suggestion.id}
+                key={suggestion._key} // ✅ dùng key duy nhất từ normalizeSuggestions
                 className={`p-4 rounded-lg border transition-colors duration-200 ${
-                  state.theme === "dark"
+                  state?.theme === "dark"
                     ? "bg-gray-700 border-gray-600"
                     : "bg-gray-50 border-gray-200"
                 }`}
@@ -177,7 +196,7 @@ const AIPlanner = () => {
                           suggestion.impact
                         )}`}
                       >
-                        Impact: {suggestion.impact}
+                        Impact: {suggestion.impact || "unknown"}
                       </span>
                     </div>
 
